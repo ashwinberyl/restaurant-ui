@@ -54,11 +54,12 @@ jobs:
           cd infra-repo
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          sed -i "s|image: ghcr.io/${{ env.IMAGE_NAME }}:.*|image: ghcr.io/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}|" ${{ env.MANIFEST_FILE }}
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          sed -i "s|image: ghcr.io/${{ env.IMAGE_NAME }}:.*|image: ghcr.io/${{ env.IMAGE_NAME }}:sha-${SHORT_SHA}|" ${{ env.MANIFEST_FILE }}
           git add ${{ env.MANIFEST_FILE }}
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Update restaurant-ui image to sha-${{ github.sha }}"
+            git commit -m "Update restaurant-ui image to sha-${SHORT_SHA}"
             git push origin master
           fi
