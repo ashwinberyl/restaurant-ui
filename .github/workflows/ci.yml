@@ -43,3 +43,22 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Update Kubernetes Manifest in Infra Repo
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+          INFRA_REPO: ashwinberyl/restaurant-infra
+          MANIFEST_FILE: k8s/ui.yaml
+        run: |
+          git clone https://x-access-token:${API_TOKEN_GITHUB}@github.com/${{ env.INFRA_REPO }}.git infra-repo
+          cd infra-repo
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          sed -i "s|image: ghcr.io/${{ env.IMAGE_NAME }}:.*|image: ghcr.io/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}|" ${{ env.MANIFEST_FILE }}
+          git add ${{ env.MANIFEST_FILE }}
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update restaurant-ui image to sha-${{ github.sha }}"
+            git push origin master
+          fi
