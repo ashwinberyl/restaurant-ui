@@ -52,7 +52,7 @@ export default function Tables() {
         <div className="container">
             <div className="page-header">
                 <h1>Restaurant Tables</h1>
-                <p>Manage your restaurant's table inventory</p>
+                <p>Manage your restaurant's table inventory like a boss</p>
             </div>
 
             {message && (
