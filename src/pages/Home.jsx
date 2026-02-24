@@ -22,7 +22,7 @@ export default function Home() {
     return (
         <>
             <section className="hero">
-                <h1>Reserve Your Perfect Table</h1>
+                <h1>Reserve Your Table Perfectly</h1>
                 <p>
                     Seamless dining reservations with real-time availability.
                     Find the perfect table for any occasion.
